@@ -1,0 +1,19 @@
+Architecture Explanation
+Multi-Tenant Data Isolation
+Each tenant's application interacts with a central Azure Function for orchestration. Documents and files from different tenants are stored in container-per-tenant fashion within the same Azure storage account, ensuring logical isolation and easier access management.
+
+Extraction and Indexing Flow
+The Azure Function coordinates ingestion and triggers Document Intelligence for extraction. Results are sent to Azure AI Search, creating a distinct index per tenant. Once the search task is complete, a function or logic deletes the search index for proper lifecycle management.
+
+Context Enrichment and Generative AI
+For extraction steps requiring advanced LLMs (e.g., fact synthesis), Azure API Management serves as a scalable facade, routing and throttling traffic transparently to multiple OpenAI endpoints behind it. This ensures horizontal scalability and secure, consistent API access for all tenants.
+
+Scalable & Secure Design
+Document Intelligence can be scaled with multiple instances or containers.
+
+APIM and OpenAI endpoints scale independently and can enforce quotas per tenant for robust operations.
+
+Deleting search indexes ensures resource lifecycle control and tenant data privacy.
+
+This pattern enables a robust Retrieval-Augmented Generation workflow for multi-tenant applications, supporting efficient scaling, cost optimization, and high security for enterprise AI deployments on Azure.
+
